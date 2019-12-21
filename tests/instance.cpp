@@ -6,15 +6,17 @@
 
 #include "Chorus.hpp"
 #include "Reverb.hpp"
+#include "Settings.hpp"
 #include "Soundfont.hpp"
 #include "Synth.hpp"
 
 using namespace std;
 using namespace Fluidsynth;
 
-void test_implements() {
+int main() {
     Chorus *chorus;
     Reverb *reverb;
+    Settings *settings;
     Soundfont *soundfont;
     Synth *synth;
 
@@ -40,14 +42,13 @@ void test_implements() {
     assert(soundfont->getOffset() == 9);
     delete soundfont;
 
+    cout << C_INFO2 << "- Settings" << C_END << endl;
+    settings = new Settings();
+    delete settings;
 
     cout << C_INFO2 << "- Synth" << C_END << endl;
     synth = new Synth();
     delete synth;
-}
-
-int main() {
-    test_implements();
 
     return 0;
 }

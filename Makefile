@@ -4,7 +4,7 @@ LD=g++
 CXXFLAGS=-Wall -fexceptions
 CXXFLAGS+=-Iinclude
 
-LDFLAGS=
+LDFLAGS=-lfluidsynth
 
 SRC=$(wildcard src/*.cpp)
 OBJ=$(SRC:src/%.cpp=obj/%.o)
@@ -16,8 +16,8 @@ TST_BIN=$(TST_SRC:tests/%.cpp=bin/test-%)
 bin:
 	mkdir -p bin
 
-bin/test-%: tests/%.cpp bin $(OBJ) $(TST_OBJ)
-	$(LD) -o $@ $(OBJ) $(TST_OBJ) $(LDFLAGS)
+bin/test-%: tests/%.cpp bin $(OBJ) obj/test-%.o
+	$(LD) -o $@ $(OBJ) $(@:bin/%=obj/%.o) $(LDFLAGS)
 
 obj/test-%.o: tests/%.cpp obj
 	$(CXX) $(CXXFLAGS) -c $< -o $@
@@ -28,7 +28,7 @@ obj/%.o: src/%.cpp obj
 obj:
 	mkdir -p obj
 
-.PHONY: build clean print test
+.PHONY: build clean realclean print test
 
 build: $(OBJ)
 
@@ -48,6 +48,9 @@ print:
 	@echo TST_SRC=$(TST_SRC)
 	@echo TST_OBJ=$(TST_OBJ)
 	@echo TST_BIN=$(TST_BIN)
+
+realclean: clean
+	rm -R bin
 
 test: $(TST_BIN)
 	@for test in $(TST_BIN); do \

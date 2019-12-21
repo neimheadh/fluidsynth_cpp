@@ -3,6 +3,28 @@
 using namespace std;
 using namespace Fluidsynth;
 
+Synth::Synth() {
+    own_settings = true;
+    settings = new Settings();
+    synth = NULL;
+}
+
+Synth::Synth(Settings *settings) {
+    own_settings = false;
+    this->settings = settings;
+    synth = NULL;
+}
+
+Synth::~Synth() {
+    if (active) {
+        stop();
+    }
+
+    if (own_settings) {
+        delete settings;
+    }
+}
+
 void Synth::control(SynthControlInterface) {
     // @TODO
 }
@@ -15,12 +37,8 @@ Reverb &Synth::getReverb() {
     return reverb;
 }
 
-map<string, string> Synth::getSettings() {
+const Settings *Synth::getSettings() {
     return settings;
-}
-
-string Synth::getSettings(string name) {
-    return settings[name];
 }
 
 map<unsigned short, const Soundfont *> Synth::getSoundfonts() {
@@ -47,18 +65,12 @@ void Synth::raz() {
     // @TODO
 }
 
-void Synth::setSettings(map<string, string> settings, bool replace) {
-    if (replace) {
-        this->settings = settings;
-    } else {
-        for(auto &it : settings) {
-            this->settings[it.first] = it.second;
-        }
+void Synth::setSettings(Settings *settings) {
+    if (own_settings) {
+        delete this->settings;
     }
-}
-
-void Synth::setSettings(string name, string value) {
-    this->settings[name] = value;
+    own_settings = false;
+    this->settings = settings;
 }
 
 void Synth::setSoundfonts(map<unsigned short, const Soundfont *> soundfonts, bool replace) {
@@ -77,10 +89,13 @@ void Synth::setSoundfonts(unsigned short fid, const Soundfont *soundfont) {
 
 void Synth::start() {
     active = true;
+    synth = settings->getFluidSynth();
     // @TODO
 }
 
 void Synth::stop() {
     active = false;
+    delete_fluid_synth(synth);
+    synth = NULL;
     // @TODO
 }

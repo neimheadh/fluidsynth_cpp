@@ -1,11 +1,14 @@
 #ifndef FLUIDSYNTH_SYNTH_H
 #define FLUIDSYNTH_SYNTH_H
 
+#include <cstddef>
 #include <map>
 #include <string>
+#include <fluidsynth.h>
 
 #include "Chorus.hpp"
 #include "Reverb.hpp"
+#include "Settings.hpp"
 #include "Soundfont.hpp"
 #include "SynthControlInterface.hpp"
 
@@ -16,18 +19,23 @@ namespace Fluidsynth {
         private:
             bool active;
             Chorus chorus;
+            bool own_settings;
             Reverb reverb;
-            map<string, string> settings;
+            Settings *settings;
             map<unsigned short, const Soundfont *> soundfonts;
+            fluid_synth_t *synth;
             unsigned short volume;
 
         public:
+            Synth();
+            Synth(Settings *settings);
+            ~Synth();
+
             void control(SynthControlInterface control);
 
             Chorus &getChorus();
             Reverb &getReverb();
-            map<string, string> getSettings();
-            string getSettings(string name);
+            const Settings *getSettings();
             map<unsigned short, const Soundfont *> getSoundfonts();
             const Soundfont *getSoundfonts(unsigned short fid);
             unsigned short getVolume();
@@ -39,8 +47,7 @@ namespace Fluidsynth {
 
             void setChorus(Chorus chorus);
             void setReverb(Reverb reverb);
-            void setSettings(map<string, string> settings, bool replace = false);
-            void setSettings(string name, string value);
+            void setSettings(Settings *settings);
             void setSoundfonts(map<unsigned short, const Soundfont *> soundfonts, bool replace = false);
             void setSoundfonts(unsigned short fid, const Soundfont *soundfont);
             void setVolume(unsigned short volume);
