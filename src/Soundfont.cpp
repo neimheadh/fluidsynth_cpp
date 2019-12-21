@@ -2,12 +2,12 @@
 
 using namespace Fluidsynth;
 
-Soundfont::Soundfont(const FILE *file) {
+Soundfont::Soundfont(const char *file) {
     this->file = file;
     this->offset = 0;
 }
 
-Soundfont::Soundfont(const FILE *file, unsigned short offset) {
+Soundfont::Soundfont(const char *file, unsigned short offset) {
     this->file = file;
     this->offset = offset;
 }
@@ -16,7 +16,7 @@ Soundfont::~Soundfont() {
 
 }
 
-const FILE *Soundfont::getFile() {
+const char *Soundfont::getFile() {
     return file;
 }
 
@@ -24,7 +24,7 @@ unsigned short Soundfont::getOffset() {
     return offset;
 }
 
-void Soundfont::setFile(const FILE *file) {
+void Soundfont::setFile(const char *file) {
     this->file = file;
 }
 

@@ -1,7 +1,9 @@
 #include <iostream>
 #include <assert.h>
 #include <stdio.h>
+#include <cstring>
 
+#include "env.hpp"
 #include "test.hpp"
 
 #include "Chorus.hpp"
@@ -20,8 +22,6 @@ int main() {
     Soundfont *soundfont;
     Synth *synth;
 
-    FILE *nFile = fopen("assets/file.sf2", "r");
-
     cout << C_INFO << "Test classes implementations" << C_END << endl;
 
     cout << C_INFO2 << "- Chorus" << C_END << endl;
@@ -33,12 +33,12 @@ int main() {
     delete reverb;
 
     cout << C_INFO2 << "- Soundfont" << C_END << endl;
-    soundfont = new Soundfont(nFile);
-    assert(soundfont->getFile() == nFile);
+    soundfont = new Soundfont(SF2_FILE);
+    assert(strcmp(SF2_FILE, soundfont->getFile()) == 0);
     assert(soundfont->getOffset() == 0);
     delete soundfont;
-    soundfont = new Soundfont(nFile, 9);
-    assert(soundfont->getFile() == nFile);
+    soundfont = new Soundfont(SF2_FILE, 9);
+    assert(strcmp(SF2_FILE, soundfont->getFile()) == 0);
     assert(soundfont->getOffset() == 9);
     delete soundfont;
 

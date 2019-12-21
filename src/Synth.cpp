@@ -1,4 +1,7 @@
+#include <cstring>
+
 #include "Synth.hpp"
+#include "exceptions/SynthException.hpp"
 
 using namespace std;
 using namespace Fluidsynth;
@@ -42,7 +45,13 @@ const Settings *Synth::getSettings() {
 }
 
 map<unsigned short, const Soundfont *> Synth::getSoundfonts() {
-    return soundfonts;
+    map<unsigned short, const Soundfont *> usf;
+
+    for(auto &it : soundfonts) {
+        usf[it.first] = it.second;
+    }
+
+    return usf;
 }
 
 const Soundfont *Synth::getSoundfonts(unsigned short fid) {
@@ -73,7 +82,7 @@ void Synth::setSettings(Settings *settings) {
     this->settings = settings;
 }
 
-void Synth::setSoundfonts(map<unsigned short, const Soundfont *> soundfonts, bool replace) {
+void Synth::setSoundfonts(map<unsigned short, Soundfont *> soundfonts, bool replace) {
     if (replace) {
         this->soundfonts = soundfonts;
     } else {
@@ -83,13 +92,27 @@ void Synth::setSoundfonts(map<unsigned short, const Soundfont *> soundfonts, boo
     }
 }
 
-void Synth::setSoundfonts(unsigned short fid, const Soundfont *soundfont) {
+void Synth::setSoundfonts(unsigned short fid, Soundfont *soundfont) {
     this->soundfonts[fid] = soundfont;
 }
 
 void Synth::start() {
+    char *buf;
+
     active = true;
     synth = settings->getFluidSynth();
+
+    if (!synth) {
+        throw new SynthException("Failed to create fluid synthesizer");
+    }
+
+    for (auto &it : soundfonts) {
+        if (!fluid_synth_sfload(synth, it.second->getFile(), it.first)) {
+            buf = new char[50 + strlen(it.second->getFile())];
+            sprintf(buf, "Failed to load the soundfont #%d '%s'", it.first, it.second->getFile());
+            throw new SynthException(buf);
+        }
+    }
     // @TODO
 }
 

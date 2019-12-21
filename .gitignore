@@ -1,3 +1,6 @@
 # G++ Build files
 *.gch
 *.o
+
+# Environment file
+env.hpp

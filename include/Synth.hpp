@@ -22,7 +22,7 @@ namespace Fluidsynth {
             bool own_settings;
             Reverb reverb;
             Settings *settings;
-            map<unsigned short, const Soundfont *> soundfonts;
+            map<unsigned short, Soundfont *> soundfonts;
             fluid_synth_t *synth;
             unsigned short volume;
 
@@ -48,8 +48,8 @@ namespace Fluidsynth {
             void setChorus(Chorus chorus);
             void setReverb(Reverb reverb);
             void setSettings(Settings *settings);
-            void setSoundfonts(map<unsigned short, const Soundfont *> soundfonts, bool replace = false);
-            void setSoundfonts(unsigned short fid, const Soundfont *soundfont);
+            void setSoundfonts(map<unsigned short, Soundfont *> soundfonts, bool replace = false);
+            void setSoundfonts(unsigned short fid, Soundfont *soundfont);
             void setVolume(unsigned short volume);
 
             void start();

@@ -7,30 +7,31 @@ CXXFLAGS+=-Iinclude
 LDFLAGS=-lfluidsynth
 
 SRC=$(wildcard src/*.cpp)
+SRC+=$(wildcard src/exceptions/*.cpp)
 OBJ=$(SRC:src/%.cpp=obj/%.o)
 
 TST_SRC=$(wildcard tests/*.cpp)
 TST_OBJ=$(TST_SRC:tests/%.cpp=obj/test-%.o)
 TST_BIN=$(TST_SRC:tests/%.cpp=bin/test-%)
 
-bin:
-	mkdir -p bin
-
-bin/test-%: tests/%.cpp bin $(OBJ) obj/test-%.o
+bin/test-%: tests/%.cpp dir $(OBJ) obj/test-%.o
 	$(LD) -o $@ $(OBJ) $(@:bin/%=obj/%.o) $(LDFLAGS)
 
-obj/test-%.o: tests/%.cpp obj
+env.hpp: env.dist.hpp
+	cp env.dist.hpp env.hpp
+
+obj/test-%.o: tests/%.cpp env.hpp
+	$(CXX) $(CXXFLAGS) -I . -c $< -o $@
+
+obj/%.o: src/%.cpp dir
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-obj/%.o: src/%.cpp obj
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-obj:
-	mkdir -p obj
-
-.PHONY: build clean realclean print test
+.PHONY: build clean dir realclean print test
 
 build: $(OBJ)
+
+dir:
+	mkdir -p bin obj/exceptions
 
 clean:
 	rm -R obj
@@ -56,6 +57,4 @@ test: $(TST_BIN)
 	@for test in $(TST_BIN); do \
 		echo "\033[34;1m### $$test ###\033[0m"; \
 		eval $$test; \
-	done
-		
-		
+	done	

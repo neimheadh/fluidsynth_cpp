@@ -1,7 +1,10 @@
 #ifndef FLUIDSYNTH_SETTINGS_H
 #define FLUIDSYNTH_SETTINGS_H
 
+#include <cstddef>
+
 #include <fluidsynth.h>
+
 
 namespace Fluidsynth {
     class Settings {
