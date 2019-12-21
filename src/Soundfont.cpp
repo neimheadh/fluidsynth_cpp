@@ -4,11 +4,16 @@ using namespace Fluidsynth;
 
 Soundfont::Soundfont(const FILE *file) {
     this->file = file;
+    this->offset = 0;
 }
 
 Soundfont::Soundfont(const FILE *file, unsigned short offset) {
     this->file = file;
     this->offset = offset;
+}
+
+Soundfont::~Soundfont() {
+
 }
 
 const FILE *Soundfont::getFile() {

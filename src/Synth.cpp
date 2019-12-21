@@ -7,6 +7,14 @@ void Synth::control(SynthControlInterface) {
     // @TODO
 }
 
+Chorus &Synth::getChorus() {
+    return chorus;
+}
+
+Reverb &Synth::getReverb() {
+    return reverb;
+}
+
 map<string, string> Synth::getSettings() {
     return settings;
 }

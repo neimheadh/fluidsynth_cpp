@@ -24,8 +24,8 @@ namespace Fluidsynth {
         public:
             void control(SynthControlInterface control);
 
-            Chorus getChorus();
-            Reverb getReverb();
+            Chorus &getChorus();
+            Reverb &getReverb();
             map<string, string> getSettings();
             string getSettings(string name);
             map<unsigned short, const Soundfont *> getSoundfonts();
