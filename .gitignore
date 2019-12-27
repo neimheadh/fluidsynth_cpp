@@ -1,3 +1,4 @@
 # G++ Build files
 *.gch
 *.o
+/bin
