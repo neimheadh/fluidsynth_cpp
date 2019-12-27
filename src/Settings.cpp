@@ -15,6 +15,6 @@ Settings::~Settings() {
     delete_fluid_settings(settings);
 }
 
-fluid_synth_t *Settings::getFluidSynth() {
-    return new_fluid_synth(settings);
+fluid_settings_t *Settings::getFluidSettings() {
+    return settings;
 }

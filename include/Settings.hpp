@@ -16,6 +16,7 @@ namespace Fluidsynth {
             ~Settings();
 
             fluid_synth_t *getFluidSynth();
+            fluid_settings_t *getFluidSettings();
     };
 }
 

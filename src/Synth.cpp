@@ -9,13 +9,13 @@ using namespace Fluidsynth;
 Synth::Synth() {
     own_settings = true;
     settings = new Settings();
-    synth = NULL;
+    _init_fluid_synth();
 }
 
 Synth::Synth(Settings *settings) {
     own_settings = false;
     this->settings = settings;
-    synth = NULL;
+    _init_fluid_synth();
 }
 
 Synth::~Synth() {
@@ -23,8 +23,18 @@ Synth::~Synth() {
         stop();
     }
 
+    delete_fluid_synth(synth);
+
     if (own_settings) {
         delete settings;
+    }
+}
+
+void Synth::_init_fluid_synth() {
+    synth = new_fluid_synth(settings->getFluidSettings());
+
+    if (!synth) {
+        throw new SynthException("Failed to create fluid synthesizer");
     }
 }
 
@@ -52,6 +62,10 @@ map<unsigned short, const Soundfont *> Synth::getSoundfonts() {
     }
 
     return usf;
+}
+
+fluid_synth_t *Synth::getFluidSynth() {
+    return synth;
 }
 
 const Soundfont *Synth::getSoundfonts(unsigned short fid) {
@@ -100,11 +114,6 @@ void Synth::start() {
     char *buf;
 
     active = true;
-    synth = settings->getFluidSynth();
-
-    if (!synth) {
-        throw new SynthException("Failed to create fluid synthesizer");
-    }
 
     for (auto &it : soundfonts) {
         if (!fluid_synth_sfload(synth, it.second->getFile(), it.first)) {
@@ -118,7 +127,5 @@ void Synth::start() {
 
 void Synth::stop() {
     active = false;
-    delete_fluid_synth(synth);
-    synth = NULL;
     // @TODO
 }

@@ -26,6 +26,8 @@ namespace Fluidsynth {
             fluid_synth_t *synth;
             unsigned short volume;
 
+            void _init_fluid_synth();
+
         public:
             Synth();
             Synth(Settings *settings);
@@ -34,6 +36,7 @@ namespace Fluidsynth {
             void control(SynthControlInterface control);
 
             Chorus &getChorus();
+            fluid_synth_t *getFluidSynth();
             Reverb &getReverb();
             const Settings *getSettings();
             map<unsigned short, const Soundfont *> getSoundfonts();
