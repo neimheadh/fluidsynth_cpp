@@ -1,6 +1,7 @@
 # G++ Build files
 *.gch
 *.o
+/bin
 
 # Environment file
 env.hpp
