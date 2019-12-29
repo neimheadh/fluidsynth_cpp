@@ -1,12 +1,15 @@
 #ifndef FLUIDSYNTH_SYNTH_H
 #define FLUIDSYNTH_SYNTH_H
 
+#define DEFAULT_DRIVER "alsa"
+
 #include <cstddef>
 #include <map>
 #include <string>
 #include <fluidsynth.h>
 
 #include "Chorus.hpp"
+#include "Driver.hpp"
 #include "Reverb.hpp"
 #include "Settings.hpp"
 #include "Soundfont.hpp"
@@ -18,7 +21,9 @@ namespace Fluidsynth {
     class Synth {
         private:
             bool active;
+            unsigned char channel;
             Chorus chorus;
+            Driver *driver;
             bool own_settings;
             Reverb reverb;
             Settings *settings;
@@ -38,7 +43,7 @@ namespace Fluidsynth {
             Chorus &getChorus();
             fluid_synth_t *getFluidSynth();
             Reverb &getReverb();
-            const Settings *getSettings();
+            Settings *getSettings();
             map<unsigned short, const Soundfont *> getSoundfonts();
             const Soundfont *getSoundfonts(unsigned short fid);
             unsigned short getVolume();
@@ -48,6 +53,10 @@ namespace Fluidsynth {
             void panic();
             void raz();
 
+            void play(int key, int vel = 100);
+            void play(int chan, int key, int vel);
+
+            void setChannel(unsigned char channel);
             void setChorus(Chorus chorus);
             void setReverb(Reverb reverb);
             void setSettings(Settings *settings);

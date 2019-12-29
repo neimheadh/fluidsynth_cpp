@@ -1,18 +1,14 @@
 #ifndef FLUIDSYNTH_SYNTH_EXCEPTION_HPP
 #define FLUIDSYNTH_SYNTH_EXCEPTION_HPP
 
-#include <exception>
+#include "exceptions/Exception.hpp"
 
 using namespace std;
 
 namespace Fluidsynth {
-    class SynthException : public exception {
-        private:
-            const char *msg;
-
+    class SynthException : public Exception {
         public:
             SynthException(const char *msg = "Undefined synth exception");
-            const char *what() const throw ();
     };
 }
 

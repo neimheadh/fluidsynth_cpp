@@ -1,18 +1,14 @@
 #ifndef FLUIDSYNTH_SETTINGS_EXCEPTION_HPP
 #define FLUIDSYNTH_SETTINGS_EXCEPTION_HPP
 
-#include <exception>
+#include "exceptions/Exception.hpp"
 
 using namespace std;
 
 namespace Fluidsynth {
-    class SettingsException : public exception {
-        private:
-            const char *msg;
-
+    class SettingsException : public Exception {
         public:
             SettingsException(const char *msg = "Undefined settings exception");
-            const char *what() const throw ();
     };
 }
 

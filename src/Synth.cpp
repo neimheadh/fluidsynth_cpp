@@ -7,12 +7,16 @@ using namespace std;
 using namespace Fluidsynth;
 
 Synth::Synth() {
+    driver = NULL;
+    channel = 0;
     own_settings = true;
     settings = new Settings();
     _init_fluid_synth();
 }
 
 Synth::Synth(Settings *settings) {
+    driver = NULL;
+    channel = 0;
     own_settings = false;
     this->settings = settings;
     _init_fluid_synth();
@@ -50,7 +54,7 @@ Reverb &Synth::getReverb() {
     return reverb;
 }
 
-const Settings *Synth::getSettings() {
+Settings *Synth::getSettings() {
     return settings;
 }
 
@@ -84,6 +88,16 @@ void Synth::panic() {
     // @TODO
 }
 
+void Synth::play(int key, int vel) {
+    play(channel, key, vel);
+}
+
+void Synth::play(int chan, int key, int vel) {
+    if (fluid_synth_noteon(synth, chan, key, vel) == FLUID_FAILED) {
+        throw new SynthException("Unable to play note");
+    }
+}
+
 void Synth::raz() {
     // @TODO
 }
@@ -113,8 +127,6 @@ void Synth::setSoundfonts(unsigned short fid, Soundfont *soundfont) {
 void Synth::start() {
     char *buf;
 
-    active = true;
-
     for (auto &it : soundfonts) {
         if (!fluid_synth_sfload(synth, it.second->getFile(), it.first)) {
             buf = new char[50 + strlen(it.second->getFile())];
@@ -122,10 +134,20 @@ void Synth::start() {
             throw new SynthException(buf);
         }
     }
-    // @TODO
+
+    this->driver = new Driver(settings, this);
+    active = true;
 }
 
 void Synth::stop() {
+    if (driver != NULL) {
+        delete driver;
+        driver = NULL;
+    }
+
     active = false;
-    // @TODO
+}
+
+void Synth::setChannel(unsigned char channel) {
+    this->channel = channel;
 }
