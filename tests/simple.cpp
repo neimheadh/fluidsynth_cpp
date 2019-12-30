@@ -16,7 +16,7 @@ int main() {
         cout << C_INFO << "Test synth - Simple note" << C_END << endl;
 
         synth.setSoundfonts(1, new Soundfont(SF2_FILE));
-        synth.getSettings()->setSettings(AUDIO_DRIVER, SETTING_AUDIO_DRIVER);
+        synth.getSettings()->setSettings("audio.driver", SETTING_AUDIO_DRIVER);
 
         cout << C_INFO2 << "- Start synth" << C_END << endl;
         synth.start();
